@@ -11,6 +11,8 @@ category:           Distribution
 homepage:           https://github.com/peti/distribution-opensuse/
 build-type:         Simple
 extra-source-files: README.md
+                    tests/run-tests
+                    tests/guess-changelog/*.test
 cabal-version:      >= 1.10
 
 source-repository head
