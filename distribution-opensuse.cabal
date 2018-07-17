@@ -1,0 +1,19 @@
+name:               distribution-opensuse
+version:            1.0.0
+synopsis:           Types, functions, and tools to manipulate the openSUSE distribution
+description:        Types, functions, and tools to manipulate the openSUSE distribution.
+license:            BSD3
+license-file:       LICENSE
+author:             Peter Simons
+maintainer:         simons@cryp.to
+tested-with:        GHC == 8.0.2, GHC == 8.2.2, GHC == 8.4.3
+category:           Distribution
+homepage:           https://github.com/peti/distribution-opensuse/
+build-type:         Simple
+extra-source-files: README.md
+cabal-version:      >= 1.10
+
+library
+  hs-source-dirs:   src
+  build-depends:    base < 5
+  default-language: Haskell2010
