@@ -14,7 +14,8 @@ extra-source-files: README.md
 cabal-version:      >= 1.10
 
 library
-  exposed-modules:    OpenSuse.Prelude
+  exposed-modules:    OpenSuse.GuessChangeLog
+                      OpenSuse.Prelude
                       OpenSuse.Prelude.Parser
                       OpenSuse.Prelude.PrettyPrinting
                       OpenSuse.Prelude.PrettyPrinting.Orphans
@@ -27,19 +28,31 @@ library
                       OpenSuse.Types.UserName
   hs-source-dirs:     src
   build-depends:      base         < 5
+                    , Diff
                     , aeson
                     , binary
                     , bytestring
                     , containers
                     , deepseq
                     , extra
+                    , foldl
                     , hashable
                     , hsemail
+                    , mtl
                     , parsec-class
                     , pretty
                     , text
                     , time
+                    , turtle
   default-language:   Haskell2010
   default-extensions: MonadFailDesugaring
   ghc-options:        -Wall -Wcompat -Wincomplete-uni-patterns -Wincomplete-record-updates
                       -Wredundant-constraints
+
+executable guess-changelog
+  main-is:            guess-changelog.hs
+  build-depends:      base, containers, distribution-opensuse, text, turtle
+  default-language:   Haskell2010
+  default-extensions: MonadFailDesugaring
+  ghc-options:        -Wall -Wcompat -Wincomplete-uni-patterns -Wincomplete-record-updates
+                      -Wredundant-constraints -threaded
