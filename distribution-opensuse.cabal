@@ -13,6 +13,10 @@ build-type:         Simple
 extra-source-files: README.md
 cabal-version:      >= 1.10
 
+source-repository head
+  type:     git
+  location: git://github.com/peti/distribution-opensuse.git
+
 library
   exposed-modules:    OpenSuse.GuessChangeLog
                       OpenSuse.Prelude
