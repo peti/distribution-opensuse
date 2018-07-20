@@ -3,6 +3,8 @@
 
 module OpenSuse.GuessChangeLog ( guessChangeLog, GuessedChangeLog(..) ) where
 
+import OpenSuse.StripSpace
+
 import qualified Control.Foldl as Fold
 import Control.Monad.Except
 import Data.Algorithm.Diff
@@ -22,11 +24,8 @@ guessChangeLog oldDir newDir = runExceptT $ do
            []    -> throwError (NoCommonChangeLogFiles oldCLF newCLF)
            [clf] -> return clf
            _     -> throwError (MoreThanOneChangeLogFile clf')
-  (oec,old) <- shellStrict (format ("git stripspace < "%fp) (oldDir </> clf)) empty
-  (nec,new) <- shellStrict (format ("git stripspace < "%fp) (newDir </> clf)) empty
-  unless (all (== ExitSuccess) [oec,nec]) $
-    -- TODO: Throw a proper exception here, or even don't even rely on git-stripspace.
-    die (format ("git stripspace failed with "%w%"\n") oec)
+  old <- stripSpace <$> liftIO (readTextFile (oldDir </> clf))
+  new <- stripSpace <$> liftIO (readTextFile (newDir </> clf))
   let changes    = cleanupEmptyLines (getDiff (Text.lines old) (Text.lines new))
       (top,diff) = span inBoth changes
       (add,foot) = span inSecond diff
