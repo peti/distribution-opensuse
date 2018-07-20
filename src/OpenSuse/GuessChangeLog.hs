@@ -1,4 +1,3 @@
-{-# LANGUAGE ApplicativeDo #-}
 {-# LANGUAGE OverloadedStrings #-}
 
 module OpenSuse.GuessChangeLog ( guessChangeLog, GuessedChangeLog(..) ) where
