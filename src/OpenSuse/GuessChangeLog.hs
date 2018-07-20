@@ -11,7 +11,7 @@ import Data.Set ( Set )
 import qualified Data.Set as Set
 import qualified Data.Text as Text
 import Prelude hiding ( FilePath )
-import Turtle hiding ( l, x )
+import Turtle hiding ( l, x, stderr, stdout )
 
 -- | Automatically guess the differences between to releases of a package by
 -- looking at the change log file provided by upstream. The function as
