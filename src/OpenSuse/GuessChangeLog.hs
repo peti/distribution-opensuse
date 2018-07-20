@@ -14,8 +14,11 @@ import qualified Data.Text as Text
 import Prelude hiding ( FilePath )
 import Turtle hiding ( l, x )
 
-guessChangeLog :: FilePath -> FilePath -> IO (Either GuessedChangeLog Text)
-guessChangeLog oldDir newDir = runExceptT $ do
+guessChangeLog :: FilePath -> FilePath -> IO GuessedChangeLog
+guessChangeLog oldDir = fmap (either id id) . guessChangeLog' oldDir
+
+guessChangeLog' :: FilePath -> FilePath -> IO (Either GuessedChangeLog GuessedChangeLog)
+guessChangeLog' oldDir newDir = runExceptT $ do
   oldCLF <- Set.fromList <$> listShell (findChangeLogFiles oldDir)
   newCLF <- Set.fromList <$> listShell (findChangeLogFiles newDir)
   when (all null [oldCLF,newCLF]) (throwError NoChangeLogFiles)
@@ -33,9 +36,10 @@ guessChangeLog oldDir newDir = runExceptT $ do
   when (all inBoth changes) (throwError (UndocumentedUpdate clf))
   unless (length top < 10) (throwError (UnmodifiedTopIsTooLarge clf (fromIntegral (length top))))
   unless topAddOnly (throwError (NotJustTopAdditions clf))
-  return (Text.strip (Text.unlines (map unDiff add)))
+  return (GuessedChangeLog clf (stripSpace (Text.unlines (map unDiff add))))
 
-data GuessedChangeLog = NoChangeLogFiles
+data GuessedChangeLog = GuessedChangeLog FilePath Text
+                      | NoChangeLogFiles
                       | UndocumentedUpdate FilePath
                       | NoCommonChangeLogFiles (Set FilePath) (Set FilePath)
                       | MoreThanOneChangeLogFile (Set FilePath)

@@ -23,7 +23,7 @@ testCases =
   ]
 
 main :: IO ()
-main = do
+main =
   forM_ testCases $ \(inp,expct) -> do
     let r = stripSpace inp
     unless (r == expct) $
