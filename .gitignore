@@ -1,3 +1,4 @@
 /.*.environment.*-*
 /dist-newstyle/*
 /dist/*
+/guess-changelog.1
