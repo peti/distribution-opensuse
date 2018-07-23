@@ -112,6 +112,13 @@ unDiff (First txt)  = txt
 unDiff (Both txt _) = txt
 unDiff (Second txt) = txt
 
+-- |
+--
+-- TODO:
+--
+-- * Don't match @guess-changelog.hs@. We should probably avoid a couple of
+--   suffixes that we know to be associated with code rather than text.
+
 findChangeLogFiles :: FilePath -> Shell FilePath
 findChangeLogFiles dirPath =
   onFiles (grepText changelogFilePattern) (filename <$> ls dirPath)
