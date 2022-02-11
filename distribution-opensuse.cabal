@@ -55,7 +55,6 @@ library
                     , time
                     , turtle
   default-language:   Haskell2010
-  default-extensions: MonadFailDesugaring
   ghc-options:        -Wall -Wcompat -Wincomplete-uni-patterns -Wincomplete-record-updates
                       -Wredundant-constraints
 
@@ -63,7 +62,6 @@ executable guess-changelog
   main-is:            guess-changelog.hs
   build-depends:      base, containers, distribution-opensuse, text, turtle
   default-language:   Haskell2010
-  default-extensions: MonadFailDesugaring
   ghc-options:        -Wall -Wcompat -Wincomplete-uni-patterns -Wincomplete-record-updates
                       -Wredundant-constraints -threaded
 
@@ -73,6 +71,5 @@ test-suite test-strip-space
   hs-source-dirs:     tests
   build-depends:      base, distribution-opensuse
   default-language:   Haskell2010
-  default-extensions: MonadFailDesugaring
   ghc-options:        -Wall -Wcompat -Wincomplete-uni-patterns -Wincomplete-record-updates
                       -Wredundant-constraints -threaded
