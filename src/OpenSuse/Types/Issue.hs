@@ -31,8 +31,9 @@ showIssue (Cve y n) = "CVE-" ++ show y ++ "-" ++ show n
 showIssue (Bsc n) = "bsc#" ++ show n
 
 parseCve :: String -> Issue
-parseCve cve = Cve (safeRead "cve-year" y) (safeRead "cve-number" n)
-  where (y,'-':n) = break (=='-') cve
+parseCve cve = case break (=='-') cve of
+                 (y,'-':n) -> Cve (safeRead "cve-year" y) (safeRead "cve-number" n)
+                 _         -> error ("malformed CVE: " ++ show cve)
 
 parseBsc :: String -> Issue     -- TODO: https://gitlab.suse.de/l3ms/smelt/issues/184
 parseBsc bsc = Bsc (safeRead "bsc number" (stripFixmeSuffix bsc))
