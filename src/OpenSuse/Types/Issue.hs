@@ -9,7 +9,7 @@ module OpenSuse.Types.Issue
 import OpenSuse.Prelude
 
 import Data.Aeson
-import Data.List
+import Data.List ( isSuffixOf )
 import Data.Text ( unpack )
 import GHC.Generics ( Generic )
 import Text.Read
