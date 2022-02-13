@@ -112,19 +112,19 @@ unDiff (First txt)  = txt
 unDiff (Both txt _) = txt
 unDiff (Second txt) = txt
 
--- |
---
--- TODO:
---
--- * Don't match @guess-changelog.hs@. We should probably avoid a couple of
---   suffixes that we know to be associated with code rather than text.
+-- | This function finds any file in the given directory path that looks like
+-- it might be a change log, meaning its name contains the word "change" and
+-- its suffix is not one that obviously designates source code.
 
 findChangeLogFiles :: FilePath -> Shell FilePath
 findChangeLogFiles dirPath =
   onFiles (grepText changelogFilePattern) (filename <$> ls dirPath)
 
 changelogFilePattern :: Pattern Text
-changelogFilePattern = star dot <> asciiCI "change" <> star dot
+changelogFilePattern = star dot <> asciiCI "change" <* invert codeSuffixPattern
+
+codeSuffixPattern :: Pattern Text
+codeSuffixPattern = choice [suffix ".hs", suffix ".c", suffix ".cpp"]
 
 -- * Utility Functions
 
