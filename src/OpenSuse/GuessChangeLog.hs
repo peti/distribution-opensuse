@@ -10,6 +10,7 @@ import Data.Algorithm.Diff
 import Data.Set ( Set )
 import qualified Data.Set as Set
 import qualified Data.Text as Text
+import qualified Data.Text.IO as Text
 import Prelude hiding ( FilePath )
 import Turtle hiding ( l, x, stderr, stdout )
 
@@ -45,8 +46,8 @@ guessChangeLog' oldDir newDir = runExceptT $ do
            []    -> throwError (NoCommonChangeLogFiles oldCLF newCLF)
            [clf] -> return clf
            _     -> throwError (MoreThanOneChangeLogFile clf')
-  old <- stripSpace <$> liftIO (readTextFile (oldDir </> clf))
-  new <- stripSpace <$> liftIO (readTextFile (newDir </> clf))
+  old <- stripSpace <$> liftIO (Text.readFile (oldDir </> clf))
+  new <- stripSpace <$> liftIO (Text.readFile (newDir </> clf))
   let changes    = cleanupEmptyLines (getDiff (Text.lines old) (Text.lines new))
       (top,diff) = span inBoth changes
       (add,foot) = span inSecond diff
