@@ -4,4 +4,5 @@ packages:
   ./distribution-opensuse.cabal
 
 package distribution-opensuse
-  ghc-options: -Wall -Wcompat -Wincomplete-uni-patterns -Wincomplete-record-updates -Wredundant-constraints
+  ghc-options: -Wall -Wcompat -Wincomplete-uni-patterns -Wincomplete-record-updates
+               -Wredundant-constraints -Wunused-packages
