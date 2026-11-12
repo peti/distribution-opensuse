@@ -41,7 +41,7 @@ library
   hs-source-dirs:     src
   build-depends:      base         < 5
                     , Diff
-                    , aeson
+                    , aeson >= 1.0
                     , binary
                     , bytestring
                     , containers
