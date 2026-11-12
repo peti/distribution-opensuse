@@ -1,0 +1,13 @@
+--- a/.github/workflows/haskell-ci.yml
++++ b/.github/workflows/haskell-ci.yml
+@@ -253,6 +253,10 @@ jobs:
+       - name: tests
+         run: |
+           $CABAL v2-test $ARG_COMPILER $ARG_TESTS $ARG_BENCH all --test-show-details=direct
++      - name: shell tests
++        run: |
++          export PATH="$(dirname "$HC"):$PATH"
++          "${PKGDIR_distribution_opensuse}/tests/run-tests"
+       - name: doctest
+         run: |
+           cd ${PKGDIR_distribution_opensuse} || false
