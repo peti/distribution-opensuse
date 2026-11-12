@@ -6,7 +6,7 @@ guess-changelog -- Extract additions to change log file between releases
 
 # SYNOPSIS
 
-**guess-changelog** OLD-DIR NEW-DIR
+**guess-changelog** [**--max-unmodified-lines** N] OLD-DIR NEW-DIR
 
 # DESCRIPTION
 
@@ -44,15 +44,23 @@ occasions, however, `guess-changelog` will fail:
   but it felt like a good idea to err on the side of caution. This case is rare
   anyways.
 
-* `guess-changelog` accepts up to 10 lines of unmodified text at the top of the
+* `guess-changelog` accepts up to 10 lines by default of unmodified text at the top of the
   upstream change log file because some people like to have a short
   introduction text there etc. If that header becomes too large, however, an
-  error is returned because we expect upstream to add text at the *top*, not in
+  error is returned (adjustable with `--max-unmodified-lines`) because we expect upstream to add text at the *top*, not in
   the middle of the file.
 
 * Upstream has edited the file in some non-trivial way other than just adding
   at the top. Sometimes people re-format old entries or rewrite URLs or fix
   typos, and in such a case it feels to risky to trust the diff.
+
+# OPTIONS
+
+**-m**, **--max-unmodified-lines** N
+: Accept at most N unmodified header lines (default: 10). N must be a
+  non-negative integer; zero requires additions at the very top of the file.
+  For example, use `guess-changelog --max-unmodified-lines 12 OLD-DIR NEW-DIR`
+  for a change log with a 12-line header. Other checks on the diff still apply.
 
 # RETURN VALUES
 

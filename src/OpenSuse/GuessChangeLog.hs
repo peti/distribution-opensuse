@@ -12,7 +12,7 @@ import qualified Data.Set as Set
 import qualified Data.Text as Text
 import qualified Data.Text.IO as Text
 import Prelude hiding ( FilePath )
-import Turtle hiding ( l, x, stderr, stdout )
+import Turtle hiding ( l, x, stderr, stdout, limit )
 
 -- | Automatically guess the differences between to releases of a package by
 -- looking at the change log file provided by upstream. The function as
@@ -33,11 +33,18 @@ import Turtle hiding ( l, x, stderr, stdout )
 --
 --   4. Return those additions as 'Text'.
 
-guessChangeLog :: FilePath -> FilePath -> IO GuessedChangeLog
-guessChangeLog oldDir = fmap (either id id) . guessChangeLog' oldDir
+guessChangeLog :: Word
+               -- ^ Maximum number of unmodified header lines to accept
+               -- (inclusive). Zero requires additions at the very top.
+               -> FilePath
+               -- ^ Directory containing the older release.
+               -> FilePath
+               -- ^ Directory containing the updated release.
+               -> IO GuessedChangeLog
+guessChangeLog limit oldDir = fmap (either id id) . guessChangeLog' limit oldDir
 
-guessChangeLog' :: FilePath -> FilePath -> IO (Either GuessedChangeLog GuessedChangeLog)
-guessChangeLog' oldDir newDir = runExceptT $ do
+guessChangeLog' :: Word -> FilePath -> FilePath -> IO (Either GuessedChangeLog GuessedChangeLog)
+guessChangeLog' limit oldDir newDir = runExceptT $ do
   oldCLF <- Set.fromList <$> listShell (findChangeLogFiles oldDir)
   newCLF <- Set.fromList <$> listShell (findChangeLogFiles newDir)
   when (all null [oldCLF,newCLF]) (throwError NoChangeLogFiles)
@@ -53,7 +60,7 @@ guessChangeLog' oldDir newDir = runExceptT $ do
       (add,foot) = span inSecond diff
       topAddOnly = all inBoth foot
   when (all inBoth changes) (throwError (UndocumentedUpdate clf))
-  unless (length top < 10) (throwError (UnmodifiedTopIsTooLarge clf (fromIntegral (length top))))
+  unless (toInteger (length top) <= toInteger limit) (throwError (UnmodifiedTopIsTooLarge clf (fromIntegral (length top))))
   unless topAddOnly (throwError (NotJustTopAdditions clf))
   return (GuessedChangeLog clf (stripSpace (Text.unlines (map unDiff add))))
 
@@ -82,11 +89,9 @@ data GuessedChangeLog
         -- of them, respectively, but it felt like a good idea to err on the
         -- side of caution. This case is rare anyways.
     | UnmodifiedTopIsTooLarge FilePath Word
-        -- ^ 'guessChangelog' accepts up to 10 lines of unmodified text at the
-        -- top of the upstream change log file because some people like to have
-        -- a short introduction text there etc. If that header becomes too
-        -- large, however, then we return this error because we expect upstream
-        -- to add text at the top, not in the middle of the file.
+        -- ^ The unmodified header exceeds the line limit supplied to
+        -- 'guessChangeLog'. Short introductions are allowed, but larger
+        -- headers suggest upstream added text in the middle of the file.
     | NotJustTopAdditions FilePath
         -- ^ This happens when upstream edits the file in ways other than just
         -- adding at the top. Sometimes people re-format old entries or rewrite

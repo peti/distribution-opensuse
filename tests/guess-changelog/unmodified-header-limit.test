@@ -1,0 +1,24 @@
+# A twelve-line introduction exceeds the default limit, but can be accepted
+# with a custom limit. The limit is inclusive and appears in diagnostics.
+
+$$$ mkdir -p _tmp/header-limit/old _tmp/header-limit/new
+$$$ awk 'BEGIN { for (i = 1; i <= 12; i++) print "Header line " i }' > _tmp/header-limit/header
+$$$ cat _tmp/header-limit/header > _tmp/header-limit/old/CHANGELOG.md
+$$$ printf 'Old release\n' >> _tmp/header-limit/old/CHANGELOG.md
+$$$ cat _tmp/header-limit/header > _tmp/header-limit/new/CHANGELOG.md
+$$$ printf 'New release\nOld release\n' >> _tmp/header-limit/new/CHANGELOG.md
+
+$$$ cabal -v0 new-run guess-changelog -- _tmp/header-limit/old _tmp/header-limit/new
+>>>2
+CHANGELOG.md has more than 10 unmodified lines at top: 12
+>>>= 0
+
+$$$ cabal -v0 new-run guess-changelog -- --max-unmodified-lines 12 _tmp/header-limit/old _tmp/header-limit/new
+>>>
+New release
+>>>= 0
+
+$$$ cabal -v0 new-run guess-changelog -- -m 11 _tmp/header-limit/old _tmp/header-limit/new
+>>>2
+CHANGELOG.md has more than 11 unmodified lines at top: 12
+>>>= 0
