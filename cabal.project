@@ -3,6 +3,9 @@
 packages:
   ./distribution-opensuse.cabal
 
+allow-newer:
+  turtle:all
+
 package distribution-opensuse
   ghc-options: -Wall -Wcompat -Wincomplete-uni-patterns -Wincomplete-record-updates
                -Wredundant-constraints -Wunused-packages
