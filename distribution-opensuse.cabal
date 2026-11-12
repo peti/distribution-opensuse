@@ -10,7 +10,7 @@ author:             Peter Simons
 maintainer:         simons@cryp.to
 tested-with:        GHC == 8.4.4, GHC == 8.6.5, GHC == 8.8.4, GHC == 8.10.7
                   , GHC == 9.0.2, GHC == 9.2.8, GHC == 9.4.8, GHC == 9.6.7
-                  , GHC == 9.8.4, GHC == 9.10.3, GHC == 9.12.4, GHC == 9.14.1
+                  , GHC == 9.8.4, GHC == 9.10.3, GHC == 9.12.4
 category:           Distribution
 homepage:           https://github.com/peti/distribution-opensuse/
 bug-reports:        https://github.com/peti/distribution-opensuse/issues
