@@ -7,7 +7,7 @@
 +      - name: shell tests
 +        run: |
 +          export PATH="$(dirname "$HC"):$PATH"
-+          "${PKGDIR_distribution_opensuse}/tests/run-tests"
++          bash "${PKGDIR_distribution_opensuse}/tests/run-tests"
        - name: doctest
          run: |
            cd ${PKGDIR_distribution_opensuse} || false
